@@ -1,0 +1,5 @@
+/.cache
+/dictionary (letter-per-word-limit MAX).csv
+/Games
+/TestingScript.py
+/Virtual_Environment
