@@ -1,4 +1,4 @@
-import rand as rand
+import random as rand
 import time
 import string
 vowels = string.ascii_lowercase[0:5]

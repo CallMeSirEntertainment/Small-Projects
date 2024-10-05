@@ -58,7 +58,14 @@ while True:
     else:
         print("What else can I assist you with today? (Type 'exit' to quit)")
     user_input = input().lower()
-
+    power_level -= random.randint(1, 10)
+    if power_level <= 0:
+        recharge_time = random.randint(15,45)
+        print("I'm running low on power. Please wait while I recharge. Estimated time:",recharge_time, "seconds.")
+        time.sleep(recharge_time)
+        power_level = 100
+    else:
+        print(f"Current power level: {power_level}%")
     if user_input == 'exit':
         break
     elif "calculate" in user_input:
@@ -74,13 +81,4 @@ while True:
     elif "trivia" in user_input:
         trivia_game()
     else:
-        power_level -= random.randint(1, 10)
-        if power_level > 0:
-            print("I'm sorry, but I can't do that. Remember that I am only a simple AI. Maybe try rephrasing?")
-        if power_level <= 0:
-            recharge_time = random.randint(15,45)
-            print("I'm running low on power. Please wait while I recharge. Estimated time:",recharge_time, "seconds.")
-            time.sleep(recharge_time)
-            power_level = 100
-        else:
-            print(f"Current power level: {power_level}%")
+        print("I'm sorry, but I can't do that. Remember that I am only a simple AI. Maybe try rephrasing?")
