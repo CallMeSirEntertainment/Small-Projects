@@ -28,7 +28,7 @@ while True:
     print(f"Your current winning probability is {win_probability*100}%")
     if random.random() < win_probability:
         print("You won!")
-        win_probability *= 0.95  # Decrease the win probability by 5%
+        win_probability -= 0.05  # Decrease the win probability by 5%
     else:
         print("You lost! The game will now delete itself.")
         time.sleep(5)
