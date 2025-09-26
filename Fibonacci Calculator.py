@@ -1,43 +1,66 @@
-from functools import cache
-from os import system, name
-import gc
+from os import system
 from sys import set_int_max_str_digits
+
 set_int_max_str_digits(0)
-steps = []
-save_steps = False
-@cache
-def fib(n: int) -> int:
-    gc.collect()
-    if n <=1:
-        return n
+
+def clear():
+    system('clear')
+
+def fib_generator(n: int):
+    a, b = 0, 1
+    for _ in range(n + 1):
+        yield a
+        a, b = b, a + b
+
+def main():
+    clear()
+    try:
+        number = int(input('What Fibonacci number would you like to calculate?\n'))
+        if number < 0:
+            print("Please enter a non-negative integer.")
+            return
+    except ValueError:
+        print("Invalid input. Please enter an integer.")
+        return
+    clear()
+    save_to_file_choice = input('Would you like to save the result to a file? (y/n)\n').lower()
+    save_to_file = save_to_file_choice == 'y'
+    save_steps = False
+    if save_to_file:
+        clear()
+        save_steps_choice = input("Would you like to save each step to the file? (y/n)\n").lower()
+        save_steps = save_steps_choice == 'y'
+    clear()
+    print('Calculating, this may take a while...')
+    if save_to_file:
+        file_name = 'fibonacci-result.txt'
+        try:
+            with open(file_name, 'w') as file:
+                clear()
+                print(f"Saving result to {file_name}...\nDo not close this program or open the file.")
+                if save_steps:
+                    file.write('The final result is at the bottom of the file.\n\n')
+                    final_num = 0
+                    for i, num in enumerate(fib_generator(number)):
+                        file.write(f'Number {i} in the Fibonacci sequence is:\n{num}.\n\n')
+                        final_num = num
+                    file.write(f'Final result:\n{final_num}.')
+                else:
+                    final_num = 0
+                    for num in fib_generator(number):
+                        final_num = num
+                    file.write(f'Number {number} in the Fibonacci sequence is:\n{final_num}.')
+            clear()
+            print(f'Result saved to {file_name}.')
+        except IOError as e:
+            clear()
+            print(f"Error saving file: {e}")
     else:
-        return fib(n - 1) + fib(n - 2)
-number = int(input('What fibonacci number would you like to calculate?\nWarning: Large calculations use a bunch of RAM and may stall your PC.\n'))
-system('cls' if name == 'nt' else 'clear')
-save_to_file = input('Would you like to save the result to a file? (y/n)\n').lower()
-if save_to_file == 'y':
-    system('cls' if name == 'nt' else 'clear')
-    save_steps = input("Would you like to save each step to the file? (y/n)\nNot recommended for calculations greater than 100000.\n").lower()
-system('cls' if name == 'nt' else 'clear')
-print('Calculating, this may take a while...')
-for i in range(0,number + 1):
-    num = fib(i)
-    if save_steps == 'y':
-        steps.append(num)
-if save_to_file == 'y':
-    with open('fibonacci-result.txt', 'w') as file:
-        system('cls' if name == 'nt' else 'clear')
-        print("Saving result to fibonacci-result.txt...\nDo not close this program or open the file.")
-        if save_steps == 'y':
-            file.write('The final result is at the bottom of the file.\n\n')
-            for i in range(len(steps) - 1):
-                step = steps[i]
-                file.write(str(f'Number {i} in the fibonacci sequence is:\n{str(step)}.\n\n'))
-            file.write(str(f'Final result:\n{str(fib(number))}.'))
-        else:
-            file.write(str(f'Number {number} in the fibonacci sequence is:\n{str(fib(number))}.'))
-    system('cls' if name == 'nt' else 'clear')
-    print(f'Result saved to fibonacci-result (ID {id}).txt.')
-else:
-    system('cls' if name == 'nt' else 'clear')
-    print(f'Number {number} in the fibonacci sequence is:\n{fib(number)}.')
+        final_num = 0
+        for num in fib_generator(number):
+            final_num = num
+        clear()
+        print(f'Number {number} in the Fibonacci sequence is:\n{final_num}.')
+
+if __name__ == '__main__':
+    main()
